@@ -29,8 +29,5 @@ module.exports = {
   },
   etherscan: {
     apiKey: ftmscanApiKey
-  },
-  gasReporter: {
-    excludeContracts: ["contracts/mocks/"]
   }
 };
