@@ -1,10 +1,3 @@
-/******************************************************************************
-**	@Author:				Thomas Bouder <Tbouder>
-**	@Email:					Tbouder@protonmail.com
-**	@Date:					Thursday August 26th 2021
-**	@Filename:				00_ERC721.js
-******************************************************************************/
-
 require("dotenv").config();
 const { expect, use } = require('chai');
 const { solidity } = require('ethereum-waffle');
