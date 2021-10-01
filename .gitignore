@@ -2,3 +2,5 @@ node_modules
 artifacts
 cache
 secrets.json
+.env
+build

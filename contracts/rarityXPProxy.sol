@@ -4,7 +4,7 @@ pragma solidity ^0.8.7;
 import "./interfaces/IRarity.sol";
 
 contract rarity_xp_proxy {
-    rarity constant _rm = rarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
+    IRarity constant _rm = IRarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
     string constant public name = "Rarity XP Proxy";
 
     /**
@@ -71,7 +71,7 @@ contract rarity_xp_proxy {
 
         if (spenderAllowance != type(uint).max) {
             uint newAllowance = spenderAllowance - _amount;
-            allowance[_adventurer][operator] = newAllowance;
+            allowance[_owner][_adventurer][operator] = newAllowance;
 
             emit Approval(_adventurer, operator, _amount);
         }

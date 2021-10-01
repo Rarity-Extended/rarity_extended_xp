@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-interface rarity_xp_proxy {
+interface IRarityXPProxy {
     function spend_xp(uint adventurer, uint amount) external returns (bool);
 }
 
 contract xpSpender {
-    rarity_xp_proxy _xp;
+    IRarityXPProxy _xp;
 
     constructor(address _xpProxyAddress) {
-        _xp = rarity_xp_proxy(_xpProxyAddress);
+        _xp = IRarityXPProxy(_xpProxyAddress);
     }
 
     function spendXP(uint _summoner, uint256 _amount) external {
