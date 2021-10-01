@@ -39,7 +39,7 @@ contract rarity_crafting is ERC721Enumerable {
             next_item++;
         }
 -        _rm.spend_xp(_summoner, craft_xp_per_day);
-+        _xp.spendXp(_summoner, craft_xp_per_day);
++        _xp.spend_xp(_summoner, craft_xp_per_day);
     }
 ```
 
