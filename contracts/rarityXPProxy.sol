@@ -6,38 +6,78 @@ import "./interfaces/IRarity.sol";
 contract rarity_xp_proxy {
     rarity constant _rm = rarity(0xce761D788DF608BD21bdd59d6f4B54b2e27F25Bb);
     string constant public name = "Rarity XP Proxy";
-    mapping(uint => mapping (address => uint)) public allowance;
+
+    /**
+    **  @dev Mapping for the allowances
+    **  First param (address) is the address of the owner.
+    **  Second param (uint) is the adventurerID
+    **  Third param (address) is the address we want to allow to spend XP
+    **  Fourth param (uint) is the amount of XP we want to allow to spend
+    */
+    mapping(address => mapping (uint => mapping (address => uint))) public allowance;
 
     event Approval(uint indexed adventurer, address indexed operator, uint amount);
+    event SpendXP(uint indexed adventurer, uint amount);
     
-    function _isApprovedOrOwner(uint _summoner) internal view returns (bool) {
-        return (_rm.getApproved(_summoner) == msg.sender || _rm.ownerOf(_summoner) == msg.sender);
+    /**
+    **  @dev Check if the msg.sender has the autorization to act on this adventurer
+    **	@param _adventurer: TokenID of the adventurer we want to check
+    **/
+    function _isApprovedOrOwner(uint _adventurer) internal view returns (bool) {
+        return (_rm.getApproved(_adventurer) == msg.sender || _rm.ownerOf(_adventurer) == msg.sender);
     }
     
-    function isApprovedForAll(address owner) public view returns (bool) {
-        return _rm.isApprovedForAll(owner, address(this));
+    /**
+    **  @dev Check if this contract has the autorization to act on all the
+    **  adventurers of this specific owner
+    **	@param _owner: Address to check
+    **/
+    function isApprovedForAll(address _owner) public view returns (bool) {
+        return _rm.isApprovedForAll(_owner, address(this));
     }
 
-    function approve(uint adventurer, address operator, uint amount) external returns (bool) {
-        require(_isApprovedOrOwner(adventurer));
-        allowance[adventurer][operator] = amount;
+    /**
+    **  @dev Sets `_amount` as the allowance of `_operator` over the adventurer
+    **  `_adventurer`.
+    **  @param _adventurer: TokenID of the adventurer we want to set the allowance
+    **  @param _operator: Address of the operator we want to set the allowance
+    **  @param _amount: Amount of XP we want to set as the allowance
+    **
+    **  @return a boolean value indicating whether the operation succeeded.
+    **  Emits an {Approval} event.
+    */
+    function approve(uint _adventurer, address _operator, uint _amount) external returns (bool) {
+        require(_isApprovedOrOwner(_adventurer));
+        address _owner = _rm.ownerOf(_adventurer);
+        allowance[_owner][_adventurer][_operator] = _amount;
 
-        emit Approval(adventurer, operator, amount);
+        emit Approval(_adventurer, _operator, _amount);
         return true;
     }
 
-    function spendXp(uint adventurer, uint amount) external returns (bool) {
+    /**
+    **  @dev Spend `_amount` XP of `_adventurer`. `_amount` is then deducted
+    **  from the caller's allowance.
+    **  @param _adventurer: TokenID of the adventurer we want to set the allowance
+    **  @param _amount: Amount of XP we want to set as the allowance
+    **
+    **  @return a boolean value indicating whether the operation succeeded.
+    **  Emits an {Approval} event.
+    */
+    function spend_xp(uint _adventurer, uint _amount) external returns (bool) {
         address operator = msg.sender;
-        uint spenderAllowance = allowance[adventurer][operator];
+        address _owner = _rm.ownerOf(_adventurer);
+        uint spenderAllowance = allowance[_owner][_adventurer][operator];
 
         if (spenderAllowance != type(uint).max) {
-            uint newAllowance = spenderAllowance - amount;
-            allowance[adventurer][operator] = newAllowance;
+            uint newAllowance = spenderAllowance - _amount;
+            allowance[_adventurer][operator] = newAllowance;
 
-            emit Approval(adventurer, operator, amount);
+            emit Approval(_adventurer, operator, _amount);
         }
 
-        _rm.spend_xp(adventurer, amount);
+        _rm.spend_xp(_adventurer, _amount);
+        emit SpendXP(_adventurer, _amount);
         return true;
     }
 }
