@@ -65,6 +65,12 @@ contract rarity_xp_proxy {
     **  Emits an {Approval} event.
     */
     function spend_xp(uint _adventurer, uint _amount) external returns (bool) {
+        if (_isApprovedOrOwner(_adventurer)) {
+            _rm.spend_xp(_adventurer, _amount);
+            emit SpendXP(_adventurer, _amount);
+            return true;
+        }
+
         address operator = msg.sender;
         address _owner = _rm.ownerOf(_adventurer);
         uint spenderAllowance = allowance[_owner][_adventurer][operator];
