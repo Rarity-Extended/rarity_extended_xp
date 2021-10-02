@@ -92,7 +92,7 @@ contract rarity_xp_proxy {
     **  @param _adventurer: TokenID of the adventurer we want to set the allowance
     **  @param _amount: Amount of XP we want to set as the allowance
     */
-    function can_spend_xp(uint _adventurer, uint _amount) external returns (bool) {
+    function can_spend_xp(uint _adventurer, uint _amount) external view returns (bool) {
         address operator = msg.sender;
         address _owner = _rm.ownerOf(_adventurer);
         if (!isApprovedForAll(_owner)) {
