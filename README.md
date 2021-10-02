@@ -8,6 +8,9 @@ This situation is not ideal.
 But why do we need to approve our adventurers ? Only to spend some XP (crafting can require an amount of XP, same as the Forest (actually no, but for the example)).  
 We decided to build a Proxy for XP that could you the same way as ERC20 approvals. Indeed, thanks to the standard `setApprovalForAll` function in ERC721 contract (rarity for example) we can allow a specific address (this contract) to get an approval for every tokens owned by this address, without the approval being deleted if another approve is done. *This can be dangerous, but this contract is restricted to some specific use.*. Then it will just work in the same way as an ERC20 !  
 
+### Contract
+Deployed here : [0x640bdeff13ae5527424acd868F65357270b05eB8](https://ftmscan.com/address/0x640bdeff13ae5527424acd868F65357270b05eB8#code)
+
 #### How to proceed
 1. `rarity.setApprovalForAll(rarityXPProxyAddress, true)` to allow this contract to spend the XP of your adventurers
 2. `rarityXPProxy.approve(MY_ADVENTURER_ID, THE_OPERATOR_AKA_THE_CRAFTING_CONTRACT, AMOUNT)` to allow the operator contract (that use rarityXPProxy) to spend some of your XP (AMOUNT xp to be exact, at most)
