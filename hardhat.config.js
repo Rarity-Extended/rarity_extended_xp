@@ -39,16 +39,16 @@ module.exports = {
             },
             chainId: 250
         },
+        localhost: {
+          url: "http://localhost:8545",
+          timeout: 2000000000,
+          accounts: [PRIVATE_KEY]
+        },
         fantom: {
           chainId: 250,
           url: 'https://rpc.ftm.tools',
           accounts: [PRIVATE_KEY]
         }
-    },
-    namedAccounts: {
-        deployer: {
-            default: 0,
-        },
     },
     etherscan: {
       apiKey: FTM_KEY

@@ -4,7 +4,7 @@ async function main() {
     await hre.run("compile");
 
     //Deploy
-    this.rarityXPProxy = await ethers.getContractFactory("rarityXPProxy");
+    this.rarityXPProxy = await ethers.getContractFactory("rarity_xp_proxy");
     this.rarityXPProxy = await this.rarityXPProxy.deploy();
     console.log("Deployed BA to:", this.rarityXPProxy.address);
 
