@@ -86,4 +86,20 @@ contract rarity_xp_proxy {
         emit SpendXP(_adventurer, _amount);
         return true;
     }
+
+    /**
+    **  @dev Check if this contract can spend some XP for a specific adventurer
+    **  @param _adventurer: TokenID of the adventurer we want to set the allowance
+    **  @param _amount: Amount of XP we want to set as the allowance
+    */
+    function can_spend_xp(uint _adventurer, uint _amount) external returns (bool) {
+        if (!isApprovedForAll(_adventurer)) {
+            return false;
+        }
+        uint spenderAllowance = allowance[_owner][_adventurer][operator];
+        if (spenderAllowance >= _amount) {
+            return true;
+        }
+        return false;
+    }
 }
